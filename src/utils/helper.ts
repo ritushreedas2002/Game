@@ -114,3 +114,32 @@ export const isGameOver = (board: Board): boolean => {
   }
   return true;
 };
+
+export const hasWon = (board: Board): boolean => {
+  const size = board.length;
+  
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (board[r][c] === 2048) return true;
+    }
+  }
+  return false;
+};
+
+
+
+export const tileColors: Record<number, string> = {
+  0: "bg-[#CDC1B4]/90 text-transparent",
+  2: "bg-[#EEE4DA] text-[#776E65]",
+  4: "bg-[#EDE0C8] text-[#776E65]",
+  8: "bg-[#F2B179] text-white",
+  16: "bg-[#F59563] text-white",
+  32: "bg-[#F67C5F] text-white",
+  64: "bg-[#F65E3B] text-white",
+  128: "bg-[#EDCF72] text-white",
+  256: "bg-[#EDCC61] text-white",
+  512: "bg-[#EDC850] text-white",
+  1024: "bg-[#EDC53F] text-white",
+  2048: "bg-[#EDC22E] text-white",
+  4096: "bg-[#3C3A32] text-white",
+};

@@ -6,6 +6,8 @@ import {
   moveUp,
   moveDown,
   isGameOver,
+  hasWon,
+  tileColors,
 } from "./utils/helper";
 import type { Board } from "./utils/helper";
 
@@ -19,6 +21,7 @@ const App = () => {
   const [board, setBoard] = useState<Board>(createEmptyBoard());
   const [score, setScore] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
+  const [won, setWon] = useState<boolean>(false);
 
   const initGame = () => {
     let newBoard = addRandomTile(createEmptyBoard());
@@ -26,6 +29,7 @@ const App = () => {
     setBoard(newBoard);
     setScore(0);
     setGameOver(false);
+    setWon(false);
   };
 
   useEffect(() => {
@@ -34,7 +38,7 @@ const App = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (gameOver) return;
+      if (gameOver || won) return;
       let movedBoard: Board = board;
       let gained = 0;
 
@@ -61,13 +65,17 @@ const App = () => {
         setBoard(newBoard);
         setScore((prev) => prev + gained);
 
+        if (hasWon(newBoard) && !won) {
+          setWon(true);
+        }
+        
         if (isGameOver(newBoard)) setGameOver(true);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [board, gameOver]);
+  }, [board, gameOver, won]);
 
   return (
     <div className="flex flex-col justify-center items-center h-screen w-screen bg-[#FAF8EF]">
@@ -87,12 +95,7 @@ const App = () => {
           row.map((cell, c) => (
             <div
               key={`${r}-${c}`}
-              className={`flex items-center justify-center text-3xl font-bold rounded-xl aspect-square transition-all duration-200 shadow-inner
-          ${
-            cell === 0
-              ? "bg-[#CDC1B4]/90 text-transparent"
-              : "bg-[#EDC22E] text-white"
-          }`}
+              className={`flex items-center justify-center text-3xl font-bold rounded-xl aspect-square transition-all duration-200 ${tileColors[cell] || "bg-[#3C3A32] text-white"}`}
             >
               {cell !== 0 ? cell : ""}
             </div>
@@ -100,7 +103,29 @@ const App = () => {
         )}
       </div>
 
-      
+    
+      {won && (
+        <div className="absolute top-0 left-0 h-screen w-screen bg-black/40 flex flex-col items-center justify-center">
+          <h2 className="text-white text-5xl font-bold mb-4">🎉 You Won! 🎉</h2>
+          <p className="text-white text-xl mb-6">Congratulations! You reached 2048!</p>
+          <div className="flex gap-4">
+            <button
+              onClick={() => setWon(false)}
+              className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg shadow-lg"
+            >
+              Continue Playing
+            </button>
+            <button
+              onClick={initGame}
+              className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg shadow-lg"
+            >
+              New Game
+            </button>
+          </div>
+        </div>
+      )}
+
+    
       {gameOver && (
         <div className="absolute top-0 left-0 h-screen w-screen bg-black/40 flex flex-col items-center justify-center">
           <h2 className="text-white text-5xl font-bold mb-4">Game Over</h2>
