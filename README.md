@@ -2,7 +2,7 @@
 
 A modern implementation of the classic 2048 puzzle game built with React, TypeScript, and Vite. Features a clean, responsive design with smooth animations and keyboard controls.
 
-![2048 Game Screenshot](https://via.placeholder.com/600x400/FAF8EF/776E65?text=2048+Game)
+![2048 Game Screenshot](https://i.postimg.cc/gcZwsBF3/Screenshot-2025-10-15-232956.png)
 
 ## 🎮 About the Game
 
